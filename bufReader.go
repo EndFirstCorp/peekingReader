@@ -25,6 +25,10 @@ func (b *bufReader) ReadByte() (byte, error) {
 	return b.br.ReadByte()
 }
 
+func (b *bufReader) ReadRune() (rune, int, error) {
+	return b.br.ReadRune()
+}
+
 func (b *bufReader) ReadBytes(size int) ([]byte, error) {
 	s := make([]byte, size)
 	actual := b.br.Buffered()

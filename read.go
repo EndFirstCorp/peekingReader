@@ -10,6 +10,7 @@ type Reader interface {
 	Peek(n int) ([]byte, error)
 	ReadByte() (byte, error)
 	ReadBytes(size int) ([]byte, error)
+	ReadRune() (rune, int, error)
 	io.Reader
 }
 

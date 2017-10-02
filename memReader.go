@@ -1,6 +1,9 @@
 package peekingReader
 
-import "io"
+import (
+	"io"
+	"unicode/utf8"
+)
 
 type memReader struct {
 	buf []byte
@@ -18,6 +21,20 @@ func (b *memReader) Peek(n int) ([]byte, error) {
 		return nil, io.EOF
 	}
 	return b.buf[b.i : b.i+n], nil
+}
+
+func (b *memReader) ReadRune() (rune, int, error) {
+	var size int
+	var r rune
+	if b.i+1 > len(b.buf) {
+		return 0, 0, io.EOF
+	}
+	r, size = rune(b.buf[b.i]), 1
+	if r >= utf8.RuneSelf {
+		r, size = utf8.DecodeRune(b.buf[b.i : b.i+2])
+	}
+	b.i += size
+	return r, size, nil
 }
 
 func (b *memReader) ReadByte() (byte, error) {
