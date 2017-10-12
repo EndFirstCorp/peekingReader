@@ -47,6 +47,7 @@ func SkipSpaces(r Reader) error {
 // SkipSubsequent skips all consecutive characters in any order
 func SkipSubsequent(r Reader, skip []byte) (bool, error) {
 	var found bool
+top:
 	for {
 		b, err := r.Peek(1) // check next byte
 		if err != nil {
@@ -57,7 +58,7 @@ func SkipSubsequent(r Reader, skip []byte) (bool, error) {
 			if next == skip[i] { // found match, so do actual read to skip
 				found = true
 				r.ReadByte() // move read pointer forward since we used this byte
-				break
+				continue top
 			}
 		}
 		return found, nil
